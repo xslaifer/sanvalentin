@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>💘 San Valentín</title>
+
+  <style>
+    :root {
+      --bg1: #ffd1dc;
+      --bg2: #ffb6c1;
+      --card: rgba(255, 255, 255, 0.78);
+      --text: #2b2b2b;
+      --pink: #ff2d55;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--bg1), var(--bg2));
+      padding: 18px;
+      overflow: hidden;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    .card {
+      width: min(520px, 100%);
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      border-radius: 26px;
+      padding: 18px;
+      box-shadow: 0 16px 50px rgba(0,0,0,0.18);
+      text-align: center;
+      position: relative;
+      z-index: 2;
+      border: 1px solid rgba(255,255,255,0.6);
+    }
+
+    h1 {
+      margin: 8px 0 10px;
+      font-size: 1.5rem;
+      color: var(--text);
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      margin: 0 0 14px;
+      color: #444;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .img-wrap {
+      width: 100%;
+      border-radius: 22px;
+      overflow: hidden;
+      margin: 12px 0 14px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.16);
+      border: 2px solid rgba(255,255,255,0.7);
+    }
+
+    .img-wrap img {
+      width: 100%;
+      display: block;
+      object-fit: cover;
+      max-height: 330px;
+    }
+
+    .music {
+      display: flex;
+      justify-content: center;
+      margin: 10px 0 6px;
+    }
+
+    .music button {
+      border: none;
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      background: rgba(255,255,255,0.9);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+      transition: transform 0.2s ease;
+      font-weight: 700;
+    }
+
+    .music button:active {
+      transform: scale(0.98);
+    }
+
+    .buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    button.main {
+      border: none;
+      padding: 14px 18px;
+      border-radius: 16px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.14);
+      font-weight: 800;
+    }
+
+    button.main:active { transform: scale(0.98); }
+
+    #yesBtn {
+      background: var(--pink);
+      color: white;
+      transform: scale(1);
+    }
+
+    #noBtn {
+      background: #2b2b2b;
+      color: white;
+    }
+
+    .msg {
+      margin-top: 14px;
+      font-weight: 800;
+      color: #111;
+      min-height: 26px;
+      font-size: 1.05rem;
+    }
+
+    .final {
+      display: none;
+      margin-top: 16px;
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .final h2 {
+      margin: 6px 0 8px;
+      font-size: 1.25rem;
+    }
+
+    .final p {
+      margin: 0;
+      font-weight: 650;
+      color: #222;
+      line-height: 1.35;
+    }
+
+    /* Corazones flotando */
+    .heart {
+      position: absolute;
+      bottom: -40px;
+      font-size: 20px;
+      opacity: 0.9;
+      animation: floatUp linear forwards;
+      z-index: 1;
+      user-select: none;
+      pointer-events: none;
+      filter: drop-shadow(0 6px 8px rgba(0,0,0,0.15));
+    }
+
+    @keyframes floatUp {
+      from {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 0.95;
+      }
+      to {
+        transform: translateY(-120vh) translateX(40px) rotate(20deg);
+        opacity: 0;
+      }
+    }
+
+    /* Confetti simple */
+    .confetti {
+      position: absolute;
+      top: -20px;
+      width: 10px;
+      height: 16px;
+      border-radius: 4px;
+      opacity: 0.9;
+      animation: fall linear forwards;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    @keyframes fall {
+      from {
+        transform: translateY(0) rotate(0deg);
+      }
+      to {
+        transform: translateY(120vh) rotate(360deg);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <audio id="bgMusic" loop>
+    <source src="music.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="card">
+    <h1>💘 ¿Hey Poki!! quiere ser mi San Valentín?</h1>
+    <p class="subtitle">No Prometo joyas, pero si alguna comida rica y besos 🥺💞</p>
+
+    <div class="img-wrap">
+      <img src="anime.jpg" alt="Nosotros jusntosh para siempre">
+    </div>
+
+    <div class="music">
+      <button id="musicBtn">▶️ Activar música</button>
+    </div>
+
+    <div class="buttons">
+      <button class="main" id="yesBtn">Sí 💖</button>
+      <button class="main" id="noBtn">No 🙃</button>
+    </div>
+
+    <div class="msg" id="msg"></div>
+
+    <div class="final" id="finalBox">
+      <h2>Yaaaaaay 💞</h2>
+      <p>
+        Sabía que ibas a decir que sí 😍<br>
+        Gracias por hacerme tan feliz ❤️<br><br>
+        <b>Te amo Poinipon !!</b> 🥺✨
+      </p>
+    </div>
+  </div>
+
+  <script>
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+    const msg = document.getElementById("msg");
+    const finalBox = document.getElementById("finalBox");
+
+    const music = document.getElementById("bgMusic");
+    const musicBtn = document.getElementById("musicBtn");
+
+    let noCount = 0;
+    let yesScale = 1;
+    let musicOn = false;
+
+    function tryPlayMusic() {
+      if (musicOn) return;
+      music.play()
+        .then(() => {
+          musicOn = true;
+          musicBtn.textContent = "🎵 Música activada";
+        })
+        .catch(() => {
+          // Si el navegador bloquea, no pasa nada.
+        });
+    }
+
+    musicBtn.addEventListener("click", () => {
+      tryPlayMusic();
+    });
+
+    // Corazones random siempre
+    function spawnHeart() {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.textContent = ["💖","💘","💗","💕","💞","💓"][Math.floor(Math.random() * 6)];
+
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.fontSize = (16 + Math.random() * 18) + "px";
+      heart.style.animationDuration = (4 + Math.random() * 4) + "s";
+
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 9000);
+    }
+
+    setInterval(spawnHeart, 450);
+
+    // Confetti cuando diga que sí
+    function confettiBurst() {
+      for (let i = 0; i < 70; i++) {
+        const c = document.createElement("div");
+        c.className = "confetti";
+        c.style.left = Math.random() * 100 + "vw";
+        c.style.animationDuration = (2.5 + Math.random() * 2.5) + "s";
+        c.style.transform = `rotate(${Math.random() * 360}deg)`;
+
+        // No ponemos colores manuales como CSS fijo:
+        // pero aquí sí necesitamos variedad, así que lo hacemos random.
+        // (Si quieres, lo dejo todo rosado).
+        const colors = ["#ff2d55", "#ffd1dc", "#ffffff", "#ff7aa2", "#2b2b2b"];
+        c.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 6000);
+      }
+    }
+
+    function showFinal() {
+      msg.textContent = "";
+      finalBox.style.display = "block";
+      yesBtn.disabled = true;
+      noBtn.disabled = true;
+      yesBtn.style.transform = "scale(1.2)";
+      confettiBurst();
+    }
+
+    // Cualquier interacción activa música
+    yesBtn.addEventListener("click", () => {
+      tryPlayMusic();
+      showFinal();
+    });
+
+    noBtn.addEventListener("click", () => {
+      tryPlayMusic();
+      noCount++;
+
+      if (noCount <= 3) {
+        yesScale += 0.25;
+        yesBtn.style.transform = `scale(${yesScale})`;
+
+        if (noCount === 1) msg.textContent = "¿Estás segura? 🥺";
+        if (noCount === 2) msg.textContent = "¿Segurísima? 😳💗";
+        if (noCount === 3) msg.textContent = "Última oportunidad... 😈💞";
+      } else {
+        msg.textContent = "Correcto 😌💖";
+        showFinal();
+      }
+    });
+  </script>
+</body>
+</html>
