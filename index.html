@@ -85,12 +85,10 @@
       background: rgba(255,255,255,0.9);
       box-shadow: 0 10px 20px rgba(0,0,0,0.12);
       transition: transform 0.2s ease;
-      font-weight: 700;
+      font-weight: 800;
     }
 
-    .music button:active {
-      transform: scale(0.98);
-    }
+    .music button:active { transform: scale(0.98); }
 
     .buttons {
       display: flex;
@@ -109,7 +107,7 @@
       cursor: pointer;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
       box-shadow: 0 12px 24px rgba(0,0,0,0.14);
-      font-weight: 800;
+      font-weight: 900;
     }
 
     button.main:active { transform: scale(0.98); }
@@ -127,7 +125,7 @@
 
     .msg {
       margin-top: 14px;
-      font-weight: 800;
+      font-weight: 900;
       color: #111;
       min-height: 26px;
       font-size: 1.05rem;
@@ -149,7 +147,7 @@
 
     .final p {
       margin: 0;
-      font-weight: 650;
+      font-weight: 700;
       color: #222;
       line-height: 1.35;
     }
@@ -178,7 +176,7 @@
       }
     }
 
-    /* Confetti simple */
+    /* Confetti */
     .confetti {
       position: absolute;
       top: -20px;
@@ -192,27 +190,56 @@
     }
 
     @keyframes fall {
-      from {
-        transform: translateY(0) rotate(0deg);
+      from { transform: translateY(0) rotate(0deg); }
+      to { transform: translateY(120vh) rotate(360deg); }
+    }
+
+    /* ⭐ Imagen flotante cuando dice SÍ */
+    .floating-sticker {
+      position: fixed;
+      bottom: -140px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 170px;
+      z-index: 999;
+      opacity: 0;
+      pointer-events: none;
+      filter: drop-shadow(0 14px 25px rgba(0,0,0,0.25));
+    }
+
+    .floating-sticker.show {
+      animation: stickerUp 2.8s ease forwards;
+    }
+
+    @keyframes stickerUp {
+      0% {
+        bottom: -140px;
+        opacity: 0;
+        transform: translateX(-50%) scale(0.7) rotate(-6deg);
       }
-      to {
-        transform: translateY(120vh) rotate(360deg);
+      25% { opacity: 1; }
+      60% { transform: translateX(-50%) scale(1.05) rotate(6deg); }
+      100% {
+        bottom: 72vh;
+        opacity: 0;
+        transform: translateX(-50%) scale(1) rotate(0deg);
       }
     }
   </style>
 </head>
 
 <body>
+  <!-- Audio -->
   <audio id="bgMusic" loop>
     <source src="music.mp3" type="audio/mpeg">
   </audio>
 
   <div class="card">
-    <h1>💘 ¿Hey Poki!! quiere ser mi San Valentín?</h1>
-    <p class="subtitle">No Prometo joyas, pero si alguna comida rica y besos 🥺💞</p>
+    <h1>💘 Hey  poki!! ¿Quieres ser mi San Valentín?</h1>
+    <p class="subtitle">No prometo joyas, pero si comida rica y beshos 🥺💞</p>
 
     <div class="img-wrap">
-      <img src="anime.jpg" alt="Nosotros jusntosh para siempre">
+      <img src="anime.jpg" alt="Nosotros versión anime">
     </div>
 
     <div class="music">
@@ -227,14 +254,17 @@
     <div class="msg" id="msg"></div>
 
     <div class="final" id="finalBox">
-      <h2>Yaaaaaay 💞</h2>
+      <h2>Excelente !! 💞</h2>
       <p>
         Sabía que ibas a decir que sí 😍<br>
         Gracias por hacerme tan feliz ❤️<br><br>
-        <b>Te amo Poinipon !!</b> 🥺✨
+        <b>Te amo</b> 🥺✨
       </p>
     </div>
   </div>
+
+  <!-- Sticker flotante -->
+  <img src="sticker.png" id="sticker" class="floating-sticker" alt="Sticker cute">
 
   <script>
     const yesBtn = document.getElementById("yesBtn");
@@ -251,21 +281,32 @@
 
     function tryPlayMusic() {
       if (musicOn) return;
+
       music.play()
         .then(() => {
           musicOn = true;
           musicBtn.textContent = "🎵 Música activada";
         })
         .catch(() => {
-          // Si el navegador bloquea, no pasa nada.
+          // Autoplay bloqueado por navegador
+          musicBtn.textContent = "🔊 Toca aquí para música";
         });
     }
+
+    // Intento de autoplay al cargar (en celular puede ser bloqueado)
+    window.addEventListener("load", () => {
+      tryPlayMusic();
+    });
+
+    // Primer toque en pantalla activa música sí o sí
+    document.addEventListener("touchstart", tryPlayMusic, { once: true });
+    document.addEventListener("click", tryPlayMusic, { once: true });
 
     musicBtn.addEventListener("click", () => {
       tryPlayMusic();
     });
 
-    // Corazones random siempre
+    // Corazones flotando siempre
     function spawnHeart() {
       const heart = document.createElement("div");
       heart.className = "heart";
@@ -278,21 +319,16 @@
       document.body.appendChild(heart);
       setTimeout(() => heart.remove(), 9000);
     }
-
     setInterval(spawnHeart, 450);
 
-    // Confetti cuando diga que sí
+    // Confetti cuando dice Sí
     function confettiBurst() {
       for (let i = 0; i < 70; i++) {
         const c = document.createElement("div");
         c.className = "confetti";
         c.style.left = Math.random() * 100 + "vw";
         c.style.animationDuration = (2.5 + Math.random() * 2.5) + "s";
-        c.style.transform = `rotate(${Math.random() * 360}deg)`;
 
-        // No ponemos colores manuales como CSS fijo:
-        // pero aquí sí necesitamos variedad, así que lo hacemos random.
-        // (Si quieres, lo dejo todo rosado).
         const colors = ["#ff2d55", "#ffd1dc", "#ffffff", "#ff7aa2", "#2b2b2b"];
         c.style.background = colors[Math.floor(Math.random() * colors.length)];
 
@@ -301,16 +337,25 @@
       }
     }
 
+    // Sticker flotante
+    function showSticker() {
+      const sticker = document.getElementById("sticker");
+      sticker.classList.remove("show"); // reset
+      void sticker.offsetWidth;         // reinicia animación
+      sticker.classList.add("show");
+    }
+
     function showFinal() {
       msg.textContent = "";
       finalBox.style.display = "block";
       yesBtn.disabled = true;
       noBtn.disabled = true;
       yesBtn.style.transform = "scale(1.2)";
+
       confettiBurst();
+      showSticker();
     }
 
-    // Cualquier interacción activa música
     yesBtn.addEventListener("click", () => {
       tryPlayMusic();
       showFinal();
